@@ -54,8 +54,13 @@
     <label for="end">End (y):</label>
     <input type="number" id="end" value="10">
     
+    <!-- Input for prefix -->
     <label for="prefix">Prefix:</label>
     <input type="text" id="prefix" value="">
+
+    <!-- Input for image logo -->
+    <label for="logo">Upload Logo Image:</label>
+    <input type="file" id="logo" accept="image/*">
 
     <button onclick="generateQRCodes()">Generate QR Codes</button>
     
@@ -67,6 +72,17 @@
             const start = parseInt(document.getElementById('start').value);
             const end = parseInt(document.getElementById('end').value);
             const prefix = document.getElementById('prefix').value;
+
+            // Get the logo file (if any)
+            const logoInput = document.getElementById('logo');
+            const logoFile = logoInput.files[0]; // Get the first file from the input
+
+            let logoUrl = null;
+
+            // If a logo file was uploaded, create an object URL for the image
+            if (logoFile) {
+                logoUrl = URL.createObjectURL(logoFile); // Create a temporary URL for the uploaded image
+            }
 
             // Get the container where QR codes will be displayed
             const container = document.getElementById('qrcodes');
@@ -85,12 +101,12 @@
                     height: 128
                 });
 
-                const img = document.createElement('img')
-                const logo = 'images/sherif.jpeg';
-                img.setAttribute('src', logo);
-                img.classList.add('my-image');
-
-                qrDiv.appendChild(img);
+                if(logoUrl) {
+                    const img = document.createElement('img')
+                    img.setAttribute('src', logoUrl);
+                    img.classList.add('my-image');
+                    qrDiv.appendChild(img);
+                }
                 // Append the QR div to the container
                 container.appendChild(qrDiv);
             }
