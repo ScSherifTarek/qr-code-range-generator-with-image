@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Generator</title>
+    <script src="js/qrcode.min.js"></script>
+    <style>
+        /* Style for QR code container */
+        #qrcodes {
+            display: flex;
+            flex-wrap: wrap; /* Allows QR codes to wrap to the next line */
+            gap: 20px; /* Space between each QR code */
+        }
+
+        /* Style for each QR code's div */
+        .qr-code {
+            border: 2px solid #000; /* Adds a border around each QR code */
+            padding: 10px; /* Adds padding inside the border */
+            margin-bottom: 20px; /* Adds space below each QR code */
+            position: relative;
+        }
+
+        .my-image {
+            width: 30%;
+            height: 30%;
+            position: absolute;
+            top: 35%;
+            left: 35%;
+            border-radius: 50%;
+            border: #fff 3px solid;
+            box-sizing: border-box;
+        }
+
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+
+            #qrcodes, #qrcodes * {
+                visibility: visible;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <h1>QR Code Generator</h1>
+    
+    <!-- Input for range -->
+    <label for="start">Start (x):</label>
+    <input type="number" id="start" value="1">
+    
+    <label for="end">End (y):</label>
+    <input type="number" id="end" value="10">
+    
+    <label for="prefix">Prefix:</label>
+    <input type="text" id="prefix" value="">
+
+    <button onclick="generateQRCodes()">Generate QR Codes</button>
+    
+    <div id="qrcodes"></div> <!-- This is where QR codes will be displayed -->
+
+    <script>
+        function generateQRCodes() {
+            // Get start and end values from the inputs
+            const start = parseInt(document.getElementById('start').value);
+            const end = parseInt(document.getElementById('end').value);
+            const prefix = document.getElementById('prefix').value;
+
+            // Get the container where QR codes will be displayed
+            const container = document.getElementById('qrcodes');
+            container.innerHTML = ''; // Clear previous QR codes
+
+            // Loop through the range from start to end
+            for (let i = start; i <= end; i++) {
+                // Create a div for each QR code with the "qr-code" class
+                const qrDiv = document.createElement('div');
+                qrDiv.classList.add('qr-code'); // Add border and padding
+
+                // Generate the QR code and append it to the div
+                new QRCode(qrDiv, {
+                    text: `${prefix}${i.toString()}`,
+                    width: 128,
+                    height: 128
+                });
+
+                const img = document.createElement('img')
+                const logo = 'images/sherif.jpeg';
+                img.setAttribute('src', logo);
+                img.classList.add('my-image');
+
+                qrDiv.appendChild(img);
+                // Append the QR div to the container
+                container.appendChild(qrDiv);
+            }
+        }
+    </script>
+
+</body>
+</html>
